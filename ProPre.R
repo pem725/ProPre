@@ -932,3 +932,245 @@ lm.4b <- lm(obFcnChng3~Func,data=NEW.dat)
 anova(lm.4,lm.4a,lm.4b)
 summary(lm.3)
 
+## Summary: Pro/Pre does not predict aggregate functioning change measures across any time-points.
+
+#### Individual Objective Functioning Measures
+
+OB.0.5 <- OB[OB$month==0,c("personid","legpress","rom","ergos","getupgo","step5")]
+names(OB.0.5) <- c("personid","legpress.0","rom.0","ergos.0","getupgo.0","step5.0")
+names(OB.0.5)
+OB.9.5 <- OB[OB$month==9,c("personid","legpress","rom","ergos","getupgo","step5")]
+names(OB.9.5) <- c("personid","legpress.9","rom.9","ergos.9","getupgo.9","step5.9")
+names(OB.9.5)
+OB.24.5 <- OB[OB$month==24,c("personid","legpress","rom","ergos","getupgo","step5")]
+names(OB.24.5) <- c("personid","legpress.24","rom.24","ergos.24","getupgo.24","step5.24")
+names(OB.24.5)
+legpressChng.dat <- data.frame(personid=OB.0.5$personid,legpressChng1=OB.9.5$legpress.9-OB.0.5$legpress.0,legpressChng2=OB.24.5$legpress.24-OB.0.5$legpress.0,legpressChng3=OB.24.5$legpress.24-OB.9.5$legpress.9)
+names(legpressChng.dat)
+romChng.dat <- data.frame(personid=OB.0.5$personid,romChng1=OB.9.5$rom.9-OB.0.5$rom.0,romChng2=OB.24.5$rom.24-OB.0.5$rom.0,romChng3=OB.24.5$rom.24-OB.9.5$rom.9)
+names(romChng.dat)
+ergosChng.dat <- data.frame(personid=OB.0.5$personid,ergosChng1=OB.9.5$ergos.9-OB.0.5$ergos.0,ergosChng2=OB.24.5$ergos.24-OB.0.5$ergos.0,ergosChng3=OB.24.5$ergos.24-OB.9.5$ergos.9)
+names(ergosChng.dat)
+getupgoChng.dat <- data.frame(personid=OB.0.5$personid,getupgoChng1=OB.9.5$getupgo.9-OB.0.5$getupgo.0,getupgoChng2=OB.24.5$getupgo.24-OB.0.5$getupgo.0,getupgoChng3=OB.24.5$getupgo.24-OB.9.5$getupgo.9)
+names(getupgoChng.dat)
+step5Chng.dat <- data.frame(personid=OB.0.5$personid,step5Chng1=OB.9.5$step5.9-OB.0.5$step5.0,step5Chng2=OB.24.5$step5.24-OB.0.5$step5.0,step5Chng3=OB.24.5$step5.24-OB.9.5$step5.9)
+names(step5Chng.dat)
+str(obFcn.dat)
+hist(obFcn.dat$obFcnChng1)
+
+# Merge Individual functioning measures, Pro/Pre, SE, & Comp
+
+NEW.dat <- merge(NEW.dat,legpressChng.dat,by="personid")
+NEW.dat <- merge(NEW.dat,romChng.dat,by="personid")
+NEW.dat <- merge(NEW.dat,ergosChng.dat,by="personid")
+NEW.dat <- merge(NEW.dat,getupgoChng.dat,by="personid")
+NEW.dat <- merge(NEW.dat,step5Chng.dat,by="personid")
+str(NEW.dat)
+
+# Pro/Pre Predicting legpress during treatment
+
+lm.0l <- lm(legpressChng1~1,data=NEW.dat)
+lm.1l <- lm(legpressChng1~Pro,data=NEW.dat)
+lm.2l <- lm(legpressChng1~Pro+Pre,data=NEW.dat)
+lm.3l <- lm(legpressChng1~Pro*Pre,data=NEW.dat)
+lm.4l <- lm(legpressChng1~Pro*Pre+SE,data=NEW.dat)
+lm.5l <- lm(legpressChng1~Pro*Pre*SE,data=NEW.dat)
+lm.6l <- lm(legpressChng1~GLabel,data=NEW.dat)
+anova(lm.0l,lm.1l,lm.2l,lm.3l,lm.4l,lm.5l,lm.6l)
+anova(lm.1l,lm.2l)
+lm.2al <- lm(legpressChng1~Pro+Pre+SE+Func+comp,data=NEW.dat)
+lm.2bl <- lm(legpressChng1~Func,data=NEW.dat)
+anova(lm.2l,lm.2al,lm.2bl)
+summary(lm.2al)
+summary(lm.6l)
+
+# Pro/Pre Predicting rom during treatment
+
+lm.0r <- lm(romChng1~1,data=NEW.dat)
+lm.1r <- lm(romChng1~Pro,data=NEW.dat)
+lm.2r <- lm(romChng1~Pro+Pre,data=NEW.dat)
+lm.3r <- lm(romChng1~Pro*Pre,data=NEW.dat)
+lm.4r <- lm(romChng1~Pro*Pre+SE,data=NEW.dat)
+lm.5r <- lm(romChng1~Pro*Pre*SE,data=NEW.dat)
+lm.6r <- lm(romChng1~GLabel,data=NEW.dat)
+anova(lm.0r,lm.1r,lm.2r,lm.3r,lm.4r,lm.5r,lm.6r)
+anova(lm.1r,lm.2r)
+lm.2ar <- lm(romChng1~Pro+Pre+SE+Func+comp,data=NEW.dat)
+lm.2br <- lm(romChng1~Func,data=NEW.dat)
+anova(lm.2r,lm.2ar,lm.2br)
+summary(lm.2ar)
+summary(lm.6r)
+
+# Pro/Pre Predicting ergos during treatment
+
+lm.0e <- lm(ergosChng1~1,data=NEW.dat)
+lm.1e <- lm(ergosChng1~Pro,data=NEW.dat)
+lm.2e <- lm(ergosChng1~Pro+Pre,data=NEW.dat)
+lm.3e <- lm(ergosChng1~Pro*Pre,data=NEW.dat)
+lm.4e <- lm(ergosChng1~Pro*Pre+SE,data=NEW.dat)
+lm.5e <- lm(ergosChng1~Pro*Pre*SE,data=NEW.dat)
+lm.6e <- lm(ergosChng1~GLabel,data=NEW.dat)
+anova(lm.0e,lm.1e,lm.2e,lm.3e,lm.4e,lm.5e,lm.6e)
+anova(lm.1e,lm.2e)
+lm.2ae <- lm(ergosChng1~Pro+Pre+SE+Func+comp,data=NEW.dat)
+lm.2be <- lm(ergosChng1~Func,data=NEW.dat)
+anova(lm.2e,lm.2ae,lm.2be)
+summary(lm.2ae)
+summary(lm.6e)
+
+# Pro/Pre Predicting getupgo during treatment
+
+lm.0g <- lm(getupgoChng1~1,data=NEW.dat)
+lm.1g <- lm(getupgoChng1~Pro,data=NEW.dat)
+lm.2g <- lm(getupgoChng1~Pro+Pre,data=NEW.dat)
+lm.3g <- lm(getupgoChng1~Pro*Pre,data=NEW.dat)
+lm.4g <- lm(getupgoChng1~Pro*Pre+SE,data=NEW.dat)
+lm.5g <- lm(getupgoChng1~Pro*Pre*SE,data=NEW.dat)
+lm.6g <- lm(getupgoChng1~GLabel,data=NEW.dat)
+anova(lm.0g,lm.1g,lm.2g,lm.3g,lm.4g,lm.5g,lm.6g)
+anova(lm.1g,lm.2g)
+lm.2ag <- lm(getupgoChng1~Pro+Pre+SE+Func+comp,data=NEW.dat)
+lm.2bg <- lm(getupgoChng1~Func,data=NEW.dat)
+anova(lm.2g,lm.2ag,lm.2bg)
+summary(lm.2ag)
+summary(lm.6g)
+
+# Pro/Pre Predicting step5 during treatment
+
+lm.0s <- lm(step5Chng1~1,data=NEW.dat)
+lm.1s <- lm(step5Chng1~Pro,data=NEW.dat)
+lm.2s <- lm(step5Chng1~Pro+Pre,data=NEW.dat)
+lm.3s <- lm(step5Chng1~Pro*Pre,data=NEW.dat)
+lm.4s <- lm(step5Chng1~Pro*Pre+SE,data=NEW.dat)
+lm.5s <- lm(step5Chng1~Pro*Pre*SE,data=NEW.dat)
+lm.6s <- lm(step5Chng1~GLabel,data=NEW.dat)
+anova(lm.0s,lm.1s,lm.2s,lm.3s,lm.4s,lm.5s,lm.6s)
+anova(lm.1s,lm.2s)
+lm.2as <- lm(step5Chng1~Pro+Pre+SE+Func+comp,data=NEW.dat)
+lm.2bs <- lm(step5Chng1~Func,data=NEW.dat)
+anova(lm.2s,lm.2as,lm.2bs)
+summary(lm.2as)
+summary(lm.6s)
+
+## Summary: Pro/Pre does not significantly predict individual objective functioning change during treatment.
+## Except, prevention marginally predicts step 5 performance.
+
+# Pro/Pre Predicting legpress 0-24 month change
+
+lm.0l <- lm(legpressChng2~1,data=NEW.dat)
+lm.1l <- lm(legpressChng2~Pro,data=NEW.dat)
+lm.2l <- lm(legpressChng2~Pro+Pre,data=NEW.dat)
+lm.3l <- lm(legpressChng2~Pro*Pre,data=NEW.dat)
+lm.4l <- lm(legpressChng2~Pro*Pre+SE,data=NEW.dat)
+lm.5l <- lm(legpressChng2~Pro*Pre*SE,data=NEW.dat)
+lm.6l <- lm(legpressChng2~GLabel,data=NEW.dat)
+anova(lm.0l,lm.1l,lm.2l,lm.3l,lm.4l,lm.5l,lm.6l)
+anova(lm.1l,lm.2l)
+lm.2al <- lm(legpressChng2~Pro+Pre+SE+Func+comp,data=NEW.dat)
+lm.2bl <- lm(legpressChng2~Func,data=NEW.dat)
+anova(lm.2l,lm.2al,lm.2bl)
+summary(lm.2al)
+summary(lm.6l)
+
+# Pro/Pre Predicting rom 0-24 month change
+
+lm.0r <- lm(romChng2~1,data=NEW.dat)
+lm.1r <- lm(romChng2~Pro,data=NEW.dat)
+lm.2r <- lm(romChng2~Pro+Pre,data=NEW.dat)
+lm.3r <- lm(romChng2~Pro*Pre,data=NEW.dat)
+lm.4r <- lm(romChng2~Pro*Pre+SE,data=NEW.dat)
+lm.5r <- lm(romChng2~Pro*Pre*SE,data=NEW.dat)
+lm.6r <- lm(romChng2~GLabel,data=NEW.dat)
+anova(lm.0r,lm.1r,lm.2r,lm.3r,lm.4r,lm.5r,lm.6r)
+anova(lm.1r,lm.2r)
+lm.2ar <- lm(romChng2~Pro+Pre+SE+Func+comp,data=NEW.dat)
+lm.2br <- lm(romChng2~Func,data=NEW.dat)
+anova(lm.2r,lm.2ar,lm.2br)
+summary(lm.2ar)
+summary(lm.6r)
+
+# Pro/Pre Predicting ergos 0-24 month change
+
+lm.0e <- lm(ergosChng2~1,data=NEW.dat)
+lm.1e <- lm(ergosChng2~Pro,data=NEW.dat)
+lm.2e <- lm(ergosChng2~Pro+Pre,data=NEW.dat)
+lm.3e <- lm(ergosChng2~Pro*Pre,data=NEW.dat)
+lm.4e <- lm(ergosChng2~Pro*Pre+SE,data=NEW.dat)
+lm.5e <- lm(ergosChng2~Pro*Pre*SE,data=NEW.dat)
+lm.6e <- lm(ergosChng2~GLabel,data=NEW.dat)
+anova(lm.0e,lm.1e,lm.2e,lm.3e,lm.4e,lm.5e,lm.6e)
+anova(lm.1e,lm.2e)
+lm.2ae <- lm(ergosChng2~Pro+Pre+SE+Func+comp,data=NEW.dat)
+lm.2be <- lm(ergosChng2~Func,data=NEW.dat)
+anova(lm.2e,lm.2ae,lm.2be)
+summary(lm.2ae)
+summary(lm.6e)
+
+# Pro/Pre Predicting getupgo 0-24 month change
+
+lm.0g <- lm(getupgoChng2~1,data=NEW.dat)
+lm.1g <- lm(getupgoChng2~Pro,data=NEW.dat)
+lm.2g <- lm(getupgoChng2~Pro+Pre,data=NEW.dat)
+lm.3g <- lm(getupgoChng2~Pro*Pre,data=NEW.dat)
+lm.4g <- lm(getupgoChng2~Pro*Pre+SE,data=NEW.dat)
+lm.5g <- lm(getupgoChng2~Pro*Pre*SE,data=NEW.dat)
+lm.6g <- lm(getupgoChng2~GLabel,data=NEW.dat)
+anova(lm.0g,lm.1g,lm.2g,lm.3g,lm.4g,lm.5g,lm.6g)
+anova(lm.1g,lm.2g)
+lm.2ag <- lm(getupgoChng2~Pro+Pre+SE+Func+comp,data=NEW.dat)
+lm.2bg <- lm(getupgoChng2~Func,data=NEW.dat)
+anova(lm.2g,lm.2ag,lm.2bg)
+summary(lm.2ag)
+summary(lm.6g)
+
+# Pro/Pre Predicting step5 0-24 month change
+
+lm.0s <- lm(step5Chng2~1,data=NEW.dat)
+lm.1s <- lm(step5Chng2~Pro,data=NEW.dat)
+lm.2s <- lm(step5Chng2~Pro+Pre,data=NEW.dat)
+lm.3s <- lm(step5Chng2~Pro*Pre,data=NEW.dat)
+lm.4s <- lm(step5Chng2~Pro*Pre+SE,data=NEW.dat)
+lm.5s <- lm(step5Chng2~Pro*Pre*SE,data=NEW.dat)
+lm.6s <- lm(step5Chng2~GLabel,data=NEW.dat)
+anova(lm.0s,lm.1s,lm.2s,lm.3s,lm.4s,lm.5s,lm.6s)
+anova(lm.1s,lm.2s)
+lm.2as <- lm(step5Chng2~Pro+Pre+SE+Func+comp,data=NEW.dat)
+lm.2bs <- lm(step5Chng2~Func,data=NEW.dat)
+anova(lm.2s,lm.2as,lm.2bs)
+summary(lm.2as)
+summary(lm.6s)
+
+## Summary:  Pro/Pre does not predicting 0-24 month change in any individual objective functioning measure.
+## Pro almost predicts legpress change over 24 months.
+
+
+
+# Does Objective Functioning Baseline differ by Pro/Pre?
+OBFuncBaseline <- merge(OB.0, NEW.dat, by="personid")
+
+OBFuncBaseline$PPcat <- as.factor(OBFuncBaseline$PPcat)
+contrasts(OBFuncBaseline$PPcat) <- contr.treatment(4,4)
+contrasts(OBFuncBaseline$PPcat)
+
+ProPreOB.Baseline <- lm(obFcn.0~PPcat,data=OBFuncBaseline)
+summary(ProPreOB.Baseline) # Not even close to sig. differences.  This is good.
+
+# Does Subjective Functioning Baseline differ by Pro/Pre?
+SubFuncBaseline <- merge(???, NEW.dat, by="personid")
+
+SubFuncBaseline$PPcat <- as.factor(SubFuncBaseline$PPcat)
+contrasts(SubFuncBaseline$PPcat) <- contr.treatment(4,4)
+contrasts(SubFuncBaseline$PPcat)
+
+ProPreSub.Baseline <- lm(???~PPcat,data=OBFuncBaseline)
+summary(ProPreSub.Baseline)
+
+# Predicting Subjective Functioning from Pro/Pre and Objective Functioning
+SubFunc <- lm(Func~Pro*Pre*obFcnChng1.x,data=NEW.dat)
+summary(SubFunc)
+
+# Correlations between Subjective Functioning and Objective Functioning at 0,9,& 24 Months
+SubOB.Func <- merge(???,NEW.dat, by="personid")
+rcorr(SubOB.Func)
+pairs.panels(SubOB.Func)
+
