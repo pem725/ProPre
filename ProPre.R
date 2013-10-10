@@ -1174,3 +1174,28 @@ SubOB.Func <- merge(???,NEW.dat, by="personid")
 rcorr(SubOB.Func)
 pairs.panels(SubOB.Func)
 
+
+# Raw correlations of functioning measures by time
+
+# New correlations for Final Analysis ----
+
+SubFcn.tmp <- knee.l[,c(2,3,17,18,19,25,26)]
+SubFcn.zfa <- zfa(SubFcn.tmp[,3:7])$scores 
+SubFcn <- data.frame(personid=knee.l[,2],month=knee.l[,3],subFcn=SubFcn.zfa)
+
+SubFcn.0 <- SubFcn[SubFcn$month==0,c(1,3)]
+SubFcn.9 <- SubFcn[SubFcn$month==9,c(1,3)]
+SubFcn.24 <- SubFcn[SubFcn$month==24,c(1,3)]
+names(SubFcn.0) <- c("personid","subFcn.0")
+names(SubFcn.9) <- c("personid","subFcn.9")
+names(SubFcn.24) <- c("personid","subFcn.24")
+
+FUNC <- merge(SubFcn.0,SubFcn.9,by="personid")
+FUNC <- merge(FUNC,SubFcn.24,by="personid")
+FUNC <- merge(FUNC,OB.0,by="personid")
+FUNC <- merge(FUNC,OB.9,by="personid")
+FUNC <- merge(FUNC,OB.24,by="personid")
+str(FUNC)
+
+round(cor(FUNC[,-1]),2)
+
