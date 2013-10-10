@@ -1253,5 +1253,23 @@ plot(out$subFcnChng2~out$obFcnChng2)
 # source("http://www.rforge.net/FSA/InstallFSA.R")
 ##library(FSA)
 
+lmO.1 <- lm(obFcnChng1~Pro*Pre,data=ALLdat.F)
+lmO.2 <- lm(obFcnChng2~Pro*Pre,data=ALLdat.F)
+lmO.3 <- lm(obFcnChng3~Pro*Pre,data=ALLdat.F)
+
+lmS.1 <- lm(subFcnChng1~Pro*Pre,data=ALLdat.F)
+lmS.2 <- lm(subFcnChng2~Pro*Pre,data=ALLdat.F)
+lmS.3 <- lm(subFcnChng3~Pro*Pre,data=ALLdat.F)
+
+summary(lmO.1)
+summary(lmO.2)
+summary(lmO.3)
+
+summary(lmS.1)
+summary(lmS.2)
+summary(lmS.3)
+
+### NOTHING HERE - go back to the lmSF.2
+
 
 
