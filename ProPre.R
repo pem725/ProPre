@@ -1199,3 +1199,59 @@ str(FUNC)
 
 round(cor(FUNC[,-1]),2)
 
+# Create final dataset for ultimate analysis (lm style) ----
+
+ALLdat.F <- merge(NEW.dat,FUNC,by="personid",all.x=T)
+
+str(ALLdat.F)
+
+ALLdat.F$subFcnChng1 <- ALLdat.F$subFcn.9 - ALLdat.F$subFcn.0
+ALLdat.F$subFcnChng2 <- ALLdat.F$subFcn.24 - ALLdat.F$subFcn.0
+ALLdat.F$subFcnChng3 <- ALLdat.F$subFcn.24 - ALLdat.F$subFcn.9
+
+lmSF.1 <- lm(subFcnChng1~obFcnChng1*Pro*Pre,data=ALLdat.F)
+lmSF.2 <- lm(subFcnChng2~obFcnChng2*Pro*Pre,data=ALLdat.F)
+lmSF.3 <- lm(subFcnChng3~obFcnChng3*Pro*Pre,data=ALLdat.F)
+
+summary(lmSF.1) # 9 months minus baseline
+summary(lmSF.2) # 24 months minus baseline
+summary(lmSF.3) # 24 months minur 9 months
+
+median(ALLdat.F$Pro)
+ALLdat.F$ProHI <- 1
+ALLdat.F$ProHI[ALLdat.F$Pro < median(ALLdat.F$Pro)] <- 0
+table(ALLdat.F$ProHI)
+aggregate(ALLdat.F$Pro,by=list(ALLdat.F$ProHI),mean)
+ALLdat.F$ProHIx <- .47
+ALLdat.F$ProHIx[ALLdat.F$Pro < median(ALLdat.F$Pro)] <- -.45
+
+median(ALLdat.F$Pre)
+ALLdat.F$PreHI <- 1
+ALLdat.F$PreHI[ALLdat.F$Pre < median(ALLdat.F$Pre)] <- 0
+table(ALLdat.F$PreHI)
+aggregate(ALLdat.F$Pre,by=list(ALLdat.F$PreHI),mean)
+ALLdat.F$PreHIx <- .41
+ALLdat.F$PreHIx[ALLdat.F$Pre < median(ALLdat.F$Pre)] <- -.43
+
+median(ALLdat.F$obFcnChng2)
+ALLdat.F$O2HI <- 1
+ALLdat.F$O2HI[ALLdat.F$obFcnChng2 < median(ALLdat.F$obFcnChng2)] <- 0
+table(ALLdat.F$O2HI)
+aggregate(ALLdat.F$obFcnChng2,by=list(ALLdat.F$O2HI),mean)
+ALLdat.F$O2HIx <- 1.15
+ALLdat.F$O2HIx[ALLdat.F$obFcnChng2 < median(ALLdat.F$obFcnChng2)] <- .12
+
+str(ALLdat.F)
+
+new.pred <- data.frame(obFcnChng2=ALLdat.F$O2HIx,Pro=ALLdat.F$ProHIx,Pre=ALLdat.F$PreHIx)
+
+out <- data.frame(new.pred,subFcnChng2=predict(lmSF.2,new.pred))
+
+plot(out$subFcnChng2~out$obFcnChng2)
+
+# Run once to make sure you have the FSA functions used below -----
+# source("http://www.rforge.net/FSA/InstallFSA.R")
+##library(FSA)
+
+
+
